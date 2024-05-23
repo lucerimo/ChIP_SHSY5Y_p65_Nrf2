@@ -1,6 +1,6 @@
 # ChIP_SHSY5Y_p65_Nrf2
 
-El orden es:
+En la carpeta codigos_bioinformaticos están los archivos correspondientes al análisis de las secuencias, alineamiento, llamado y análisis de picos. El orden es:
 
 1.fastqc_trimm_parallel.sh
 
@@ -20,4 +20,4 @@ El orden es:
 
 9.bigwig_parallel.sh
 
-
+En la carpeta Codigos_R están los códigos de análisis estadísticos y generación de gráficos.
