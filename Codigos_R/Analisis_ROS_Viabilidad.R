@@ -35,7 +35,7 @@ range <- function(x) {
 graf.barras<-function(v.respuesta,l.incub,compuesto,etiq.y,sd.respuesta,n.vector)
 {
 barplot(v.respuesta,width=1,main=paste(l.incub,"h", paste(collapse="")),
-         xlab=paste("(µM)",collapse=""), ylab=etiq.y,xlim=c(0,7),
+         xlab=paste("(ÂµM)",collapse=""), ylab=etiq.y,xlim=c(0,7),
         ylim=c(0,max(v.respuesta+(sd.respuesta/sqrt(n.vector)))),
         col = c("#f2f2f2ff","#4d4d4dff", "#999999ff", "#aaccffff", "#5599ffff", "#0055d4ff"))
 arrows(x0=c(0.7,1.9,3.1,4.3,5.5,6.7),y0=v.respuesta-(sd.respuesta/sqrt(n.vector)),x1=c(0.7,1.9,3.1,4.3,5.5,6.7),y1=v.respuesta+(sd.respuesta/sqrt(n.vector)),
@@ -231,14 +231,14 @@ graf.barras(v.respuesta=m.WA.vib[4,],l.incub="24",compuesto="Withaferin A",etiq.
 #--------------------------MFI-------------------------------------#
 datos.resv.4h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="R1"|tratam=="R2"|tratam=="R3")&Incubacion=="4",]
 mod.resv.4h.sinrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.resv.4h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.4h.sinrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.resv.4h.sinrot)
 anova(mod.resv.4h.sinrot.mfi2,mod.resv.4h.sinrot.mfi) #Se escoje el modelo completo
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.resv.4h.sinrot)
 #se acepta Ho cuando es normal
 ks.test(mod.resv.4h.sinrot.mfi$residuals, "pnorm", 0, sd(mod.resv.4h.sinrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.resv.4h.sinrot.mfi))
 boxcox(mod.resv.4h.sinrot.mfi)$x[which.max(boxcox(mod.resv.4h.sinrot.mfi)$y)]
 mod.resv.4h.sinrot.mfit<-lm(Media.geometrica^-0.46~tratam+Experimento,data=datos.resv.4h.sinrot)
@@ -250,7 +250,7 @@ ks.test(mod.resv.4h.sinrot.mfit$residuals, "pnorm", 0, sd(mod.resv.4h.sinrot.mfi
 anova(mod.resv.4h.sinrot.mfit)
 res.tky.4h.sinrot.mfi<-glht(mod.resv.4h.sinrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.4h.sinrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -265,7 +265,7 @@ interaction.plot(x.factor = datos.resv.4h.sinrot$tratam,
 #--------------------------MFI-------------------------------------#
 datos.resv.24h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="R1"|tratam=="R2"|tratam=="R3")&Incubacion=="24",]
 mod.resv.24h.sinrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.resv.24h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.24h.sinrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.resv.24h.sinrot)
 anova(mod.resv.24h.sinrot.mfi2,mod.resv.24h.sinrot.mfi)
 #se rechaza Ho cuando es heterocedastico
@@ -276,8 +276,8 @@ ks.test(mod.resv.24h.sinrot.mfi$residuals, "pnorm", 0, sd(mod.resv.24h.sinrot.mf
 anova(mod.resv.24h.sinrot.mfi)
 res.tky.24h.sinrot.mfi<-glht(mod.resv.24h.sinrot.mfi, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.24h.sinrot.mfi)
-#gráficos de supuestos
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -292,14 +292,14 @@ interaction.plot(x.factor = datos.resv.24h.sinrot$tratam,
 #--------------------------MFI-------------------------------------#
 datos.resv.4h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="RR1"|tratam=="RR2"|tratam=="RR3")&Incubacion=="4",]
 mod.resv.4h.conrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.resv.4h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.4h.conrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.resv.4h.conrot)
 anova(mod.resv.4h.conrot.mfi,mod.resv.4h.conrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.resv.4h.conrot)
 #se acepta Ho cuando es normal
 ks.test(mod.resv.4h.conrot.mfi$residuals, "pnorm", 0, sd(mod.resv.4h.conrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.resv.4h.conrot.mfi))
 boxcox(mod.resv.4h.conrot.mfi)$x[which.max(boxcox(mod.resv.4h.conrot.mfi)$y)]
 mod.resv.4h.conrot.mfit<-lm(Media.geometrica^-0.18~tratam+Experimento,data=datos.resv.4h.conrot)
@@ -311,8 +311,8 @@ ks.test(mod.resv.4h.conrot.mfit$residuals, "pnorm", 0, sd(mod.resv.4h.conrot.mfi
 anova(mod.resv.4h.conrot.mfit)
 res.tky.4h.conrot.mfi<-glht(mod.resv.4h.conrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.4h.conrot.mfi)
-#gráficos de supuestos
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -327,7 +327,7 @@ interaction.plot(x.factor = datos.resv.4h.conrot$tratam,
 #--------------------------MFI-------------------------------------#
 datos.resv.24h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="RR1"|tratam=="RR2"|tratam=="RR3")&Incubacion=="24",]
 mod.resv.24h.conrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.resv.24h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.24h.conrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.resv.24h.conrot)
 anova(mod.resv.24h.conrot.mfi,mod.resv.24h.conrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
@@ -338,7 +338,7 @@ ks.test(mod.resv.24h.conrot.mfi$residuals, "pnorm", 0, sd(mod.resv.24h.conrot.mf
 anova(mod.resv.24h.conrot.mfi)
 res.tky.24h.conrot.mfi<-glht(mod.resv.24h.conrot.mfi, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.24h.conrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -355,14 +355,14 @@ interaction.plot(x.factor = datos.resv.24h.conrot$tratam,
 #---------------------------MFI-------------------------------------#
 datos.14.2.2.4h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SW1"|tratam=="SW2"|tratam=="SW3")&Incubacion=="4",]
 mod.14.2.2.4h.sinrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.14.2.2.4h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.4h.sinrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.14.2.2.4h.sinrot)
 anova(mod.14.2.2.4h.sinrot.mfi,mod.14.2.2.4h.sinrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.14.2.2.4h.sinrot)
 #se acepta Ho cuando es normal
 ks.test(mod.14.2.2.4h.sinrot.mfi$residuals, "pnorm", 0, sd(mod.14.2.2.4h.sinrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.14.2.2.4h.sinrot.mfi))
 boxcox(mod.14.2.2.4h.sinrot.mfi)$x[which.max(boxcox(mod.14.2.2.4h.sinrot.mfi)$y)]
 mod.14.2.2.4h.sinrot.mfit<-lm(Media.geometrica^-0.74~tratam+Experimento,data=datos.14.2.2.4h.sinrot)
@@ -374,8 +374,8 @@ ks.test(mod.14.2.2.4h.sinrot.mfit$residuals, "pnorm", 0, sd(mod.14.2.2.4h.sinrot
 anova(mod.14.2.2.4h.sinrot.mfit)
 tky.14.2.2.4h.sinrot.mfi<-glht(mod.14.2.2.4h.sinrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.4h.sinrot.mfi)
-#gráficos de supuestos
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -391,14 +391,14 @@ interaction.plot(x.factor = datos.14.2.2.4h.sinrot$tratam,
 #14.2.2 4 horas sin rot
 datos.14.2.2.24h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SW1"|tratam=="SW2"|tratam=="SW3")&Incubacion=="24",]
 mod.14.2.2.24h.sinrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.14.2.2.24h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.24h.sinrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.14.2.2.24h.sinrot)
 anova(mod.14.2.2.24h.sinrot.mfi,mod.14.2.2.24h.sinrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.14.2.2.24h.sinrot)
 #se acepta Ho cuando es normal
 ks.test(mod.14.2.2.24h.sinrot.mfi$residuals, "pnorm", 0, sd(mod.14.2.2.24h.sinrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.14.2.2.24h.sinrot.mfi))
 boxcox(mod.14.2.2.24h.sinrot.mfi)$x[which.max(boxcox(mod.14.2.2.24h.sinrot.mfi)$y)]
 mod.14.2.2.24h.sinrot.mfit<-lm(Media.geometrica^0.42~tratam+Experimento,data=datos.14.2.2.24h.sinrot)
@@ -410,7 +410,7 @@ ks.test(mod.14.2.2.24h.sinrot.mfit$residuals, "pnorm", 0, sd(mod.14.2.2.24h.sinr
 anova(mod.14.2.2.24h.sinrot.mfit)
 tky.14.2.2.24h.sinrot.mfi<-glht(mod.14.2.2.24h.sinrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.24h.sinrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -426,14 +426,14 @@ interaction.plot(x.factor = datos.14.2.2.24h.sinrot$tratam,
 #14.2.2 4 horas sin rot
 datos.14.2.2.4h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SWR1"|tratam=="SWR2"|tratam=="SWR3")&Incubacion=="4",]
 mod.14.2.2.4h.conrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.14.2.2.4h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.4h.conrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.14.2.2.4h.conrot)
 anova(mod.14.2.2.4h.conrot.mfi,mod.14.2.2.4h.conrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.14.2.2.4h.conrot)
 #se acepta Ho cuando es normal
 ks.test(mod.14.2.2.4h.conrot.mfi$residuals, "pnorm", 0, sd(mod.14.2.2.4h.conrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.14.2.2.4h.conrot.mfi))
 boxcox(mod.14.2.2.4h.conrot.mfi)$x[which.max(boxcox(mod.14.2.2.4h.conrot.mfi)$y)]
 mod.14.2.2.4h.conrot.mfit<-lm(Media.geometrica^-0.06~tratam+Experimento,data=datos.14.2.2.4h.conrot)
@@ -445,7 +445,7 @@ ks.test(mod.14.2.2.4h.conrot.mfit$residuals, "pnorm", 0, sd(mod.14.2.2.4h.conrot
 anova(mod.14.2.2.4h.conrot.mfit)
 tky.14.2.2.4h.conrot.mfi<-glht(mod.14.2.2.4h.conrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.4h.conrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -460,7 +460,7 @@ interaction.plot(x.factor = datos.14.2.2.4h.conrot$tratam,
 #---------------------------MFI-------------------------------------#
 datos.14.2.2.24h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SWR1"|tratam=="SWR2"|tratam=="SWR3")&Incubacion=="24",]
 mod.14.2.2.24h.conrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.14.2.2.24h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.24h.conrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.14.2.2.24h.conrot)
 anova(mod.14.2.2.24h.conrot.mfi,mod.14.2.2.24h.conrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
@@ -471,7 +471,7 @@ ks.test(mod.14.2.2.24h.conrot.mfi$residuals, "pnorm", 0, sd(mod.14.2.2.24h.conro
 anova(mod.14.2.2.24h.conrot.mfi)
 tky.14.2.2.24h.conrot.mfi<-glht(mod.14.2.2.24h.conrot.mfi, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.24h.conrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -487,14 +487,14 @@ interaction.plot(x.factor = datos.14.2.2.24h.conrot$tratam,
 #---------------------------MFI-------------------------------------#
 datos.wita.4h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WA1"|tratam=="WA2"|tratam=="WA3")&Incubacion=="4",]
 mod.wita.4h.sinrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.wita.4h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.4h.sinrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.wita.4h.sinrot)
 anova(mod.wita.4h.sinrot.mfi,mod.wita.4h.sinrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.wita.4h.sinrot)
 #se acepta Ho cuando es normal
 ks.test(mod.wita.4h.sinrot.mfi$residuals, "pnorm", 0, sd(mod.wita.4h.sinrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.wita.4h.sinrot.mfi))
 boxcox(mod.wita.4h.sinrot.mfi)$x[which.max(boxcox(mod.wita.4h.sinrot.mfi)$y)]
 mod.wita.4h.sinrot.mfit<-lm(Media.geometrica^-0.58~tratam+Experimento,data=datos.wita.4h.sinrot)
@@ -506,7 +506,7 @@ ks.test(mod.wita.4h.sinrot.mfit$residuals, "pnorm", 0, sd(mod.wita.4h.sinrot.mfi
 anova(mod.wita.4h.sinrot.mfit)
 tky.wita.4h.sinrot.mfi<-glht(mod.wita.4h.sinrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.4h.sinrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -521,14 +521,14 @@ interaction.plot(x.factor = datos.wita.4h.sinrot$tratam,
 #---------------------------MFI-------------------------------------#
 datos.wita.24h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WA1"|tratam=="WA2"|tratam=="WA3")&Incubacion=="24",]
 mod.wita.24h.sinrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.wita.24h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.24h.sinrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.wita.24h.sinrot)
 anova(mod.wita.24h.sinrot.mfi,mod.wita.24h.sinrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.wita.24h.sinrot)
 #se acepta Ho cuando es normal
 ks.test(mod.wita.24h.sinrot.mfi$residuals, "pnorm", 0, sd(mod.wita.24h.sinrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.wita.24h.sinrot.mfi))
 boxcox(mod.wita.24h.sinrot.mfi)$x[which.max(boxcox(mod.wita.24h.sinrot.mfi)$y)]
 mod.wita.24h.sinrot.mfit<-lm(Media.geometrica^0.46~tratam+Experimento,data=datos.wita.24h.sinrot)
@@ -540,7 +540,7 @@ ks.test(mod.wita.24h.sinrot.mfit$residuals, "pnorm", 0, sd(mod.wita.24h.sinrot.m
 anova(mod.wita.24h.sinrot.mfit)
 tky.wita.24h.sinrot.mfi<-glht(mod.wita.24h.sinrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.24h.sinrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -556,14 +556,14 @@ interaction.plot(x.factor = datos.wita.24h.sinrot$tratam,
 #---------------------------MFI-------------------------------------#
 datos.wita.4h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WAR1"|tratam=="WAR2"|tratam=="WAR3")&Incubacion=="4",]
 mod.wita.4h.conrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.wita.4h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.4h.conrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.wita.4h.conrot)
 anova(mod.wita.4h.conrot.mfi,mod.wita.4h.conrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
 bptest(Media.geometrica~tratam+Experimento,data=datos.wita.4h.conrot)
 #se acepta Ho cuando es normal
 ks.test(mod.wita.4h.conrot.mfi$residuals, "pnorm", 0, sd(mod.wita.4h.conrot.mfi$residuals))
-#TRANSFORMACIÓN
+#TRANSFORMACIÃ“N
 plot(boxcox(mod.wita.4h.conrot.mfi))
 boxcox(mod.wita.4h.conrot.mfi)$x[which.max(boxcox(mod.wita.4h.conrot.mfi)$y)]
 mod.wita.4h.conrot.mfit<-lm(Media.geometrica^-0.14~tratam+Experimento,data=datos.wita.4h.conrot)
@@ -575,7 +575,7 @@ ks.test(mod.wita.4h.conrot.mfit$residuals, "pnorm", 0, sd(mod.wita.4h.conrot.mfi
 anova(mod.wita.4h.conrot.mfit)
 tky.wita.4h.conrot.mfi<-glht(mod.wita.4h.conrot.mfit, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.4h.conrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -591,7 +591,7 @@ interaction.plot(x.factor = datos.wita.4h.conrot$tratam,
 #---------------------------MFI-------------------------------------#
 datos.wita.24h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WAR1"|tratam=="WAR2"|tratam=="WAR3")&Incubacion=="24",]
 mod.wita.24h.conrot.mfi<-lm(Media.geometrica~tratam+Experimento,data=datos.wita.24h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.24h.conrot.mfi2<-lm(Media.geometrica~tratam*Experimento,data=datos.wita.24h.conrot)
 anova(mod.wita.24h.conrot.mfi,mod.wita.24h.conrot.mfi2)
 #se rechaza Ho cuando es heterocedastico
@@ -602,7 +602,7 @@ ks.test(mod.wita.24h.conrot.mfi$residuals, "pnorm", 0, sd(mod.wita.24h.conrot.mf
 anova(mod.wita.24h.conrot.mfi)
 tky.wita.24h.conrot.mfi<-glht(mod.wita.24h.conrot.mfi, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.24h.conrot.mfi)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -619,7 +619,7 @@ interaction.plot(x.factor = datos.wita.24h.conrot$tratam,
 #--------------------resv 4 horas sin rot--------------------------#
 #--------------------------Viabilidad-------------------------------------#
 mod.resv.4h.sinrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.resv.4h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.4h.sinrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.resv.4h.sinrot)
 anova(mod.resv.4h.sinrot.viab2,mod.resv.4h.sinrot.viab) #Se escoje el modelo completo
 #se rechaza Ho cuando es heterocedastico
@@ -630,7 +630,7 @@ ks.test(mod.resv.4h.sinrot.viab$residuals, "pnorm", 0, sd(mod.resv.4h.sinrot.via
 anova(mod.resv.4h.sinrot.viab)
 res.tky.4h.sinrot.viab<-glht(mod.resv.4h.sinrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.4h.sinrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -645,7 +645,7 @@ interaction.plot(x.factor = datos.resv.4h.sinrot$tratam,
 #--------------------------viab-------------------------------------#
 datos.resv.24h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="R1"|tratam=="R2"|tratam=="R3")&Incubacion=="24",]
 mod.resv.24h.sinrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.resv.24h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.24h.sinrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.resv.24h.sinrot)
 anova(mod.resv.24h.sinrot.viab2,mod.resv.24h.sinrot.viab)
 #se rechaza Ho cuando es heterocedastico
@@ -656,7 +656,7 @@ ks.test(mod.resv.24h.sinrot.viab$residuals, "pnorm", 0, sd(mod.resv.24h.sinrot.v
 anova(mod.resv.24h.sinrot.viab)
 res.tky.24h.sinrot.viab<-glht(mod.resv.24h.sinrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.24h.sinrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -671,7 +671,7 @@ interaction.plot(x.factor = datos.resv.24h.sinrot$tratam,
 #--------------------------viab-------------------------------------#
 datos.resv.4h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="RR1"|tratam=="RR2"|tratam=="RR3")&Incubacion=="4",]
 mod.resv.4h.conrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.resv.4h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.4h.conrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.resv.4h.conrot)
 anova(mod.resv.4h.conrot.viab,mod.resv.4h.conrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -682,8 +682,8 @@ ks.test(mod.resv.4h.conrot.viab$residuals, "pnorm", 0, sd(mod.resv.4h.conrot.via
 anova(mod.resv.4h.conrot.viab)
 res.tky.4h.conrot.viab<-glht(mod.resv.4h.conrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.4h.conrot.viab)
-#gráficos de supuestos
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -698,7 +698,7 @@ interaction.plot(x.factor = datos.resv.4h.conrot$tratam,
 #--------------------------viab-------------------------------------#
 datos.resv.24h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="RR1"|tratam=="RR2"|tratam=="RR3")&Incubacion=="24",]
 mod.resv.24h.conrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.resv.24h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.resv.24h.conrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.resv.24h.conrot)
 anova(mod.resv.24h.conrot.viab,mod.resv.24h.conrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -709,7 +709,7 @@ ks.test(mod.resv.24h.conrot.viab$residuals, "pnorm", 0, sd(mod.resv.24h.conrot.v
 anova(mod.resv.24h.conrot.viab)
 res.tky.24h.conrot.viab<-glht(mod.resv.24h.conrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(res.tky.24h.conrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -726,7 +726,7 @@ interaction.plot(x.factor = datos.resv.24h.conrot$tratam,
 #---------------------------viab-------------------------------------#
 datos.14.2.2.4h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SW1"|tratam=="SW2"|tratam=="SW3")&Incubacion=="4",]
 mod.14.2.2.4h.sinrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.14.2.2.4h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.4h.sinrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.14.2.2.4h.sinrot)
 anova(mod.14.2.2.4h.sinrot.viab,mod.14.2.2.4h.sinrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -737,7 +737,7 @@ ks.test(mod.14.2.2.4h.sinrot.viab$residuals, "pnorm", 0, sd(mod.14.2.2.4h.sinrot
 anova(mod.14.2.2.4h.sinrot.viab)
 tky.14.2.2.4h.sinrot.viab<-glht(mod.14.2.2.4h.sinrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.4h.sinrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -753,7 +753,7 @@ interaction.plot(x.factor = datos.14.2.2.4h.sinrot$tratam,
 #14.2.2 4 horas sin rot
 datos.14.2.2.24h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SW1"|tratam=="SW2"|tratam=="SW3")&Incubacion=="24",]
 mod.14.2.2.24h.sinrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.14.2.2.24h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.24h.sinrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.14.2.2.24h.sinrot)
 anova(mod.14.2.2.24h.sinrot.viab,mod.14.2.2.24h.sinrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -764,7 +764,7 @@ ks.test(mod.14.2.2.24h.sinrot.viab$residuals, "pnorm", 0, sd(mod.14.2.2.24h.sinr
 anova(mod.14.2.2.24h.sinrot.viab)
 tky.14.2.2.24h.sinrot.viab<-glht(mod.14.2.2.24h.sinrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.24h.sinrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -780,7 +780,7 @@ interaction.plot(x.factor = datos.14.2.2.24h.sinrot$tratam,
 #14.2.2 4 horas sin rot
 datos.14.2.2.4h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SWR1"|tratam=="SWR2"|tratam=="SWR3")&Incubacion=="4",]
 mod.14.2.2.4h.conrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.14.2.2.4h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.4h.conrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.14.2.2.4h.conrot)
 anova(mod.14.2.2.4h.conrot.viab,mod.14.2.2.4h.conrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -791,7 +791,7 @@ ks.test(mod.14.2.2.4h.conrot.viab$residuals, "pnorm", 0, sd(mod.14.2.2.4h.conrot
 anova(mod.14.2.2.4h.conrot.viab)
 tky.14.2.2.4h.conrot.viab<-glht(mod.14.2.2.4h.conrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.4h.conrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -806,7 +806,7 @@ interaction.plot(x.factor = datos.14.2.2.4h.conrot$tratam,
 #---------------------------viab-------------------------------------#
 datos.14.2.2.24h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="SWR1"|tratam=="SWR2"|tratam=="SWR3")&Incubacion=="24",]
 mod.14.2.2.24h.conrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.14.2.2.24h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.14.2.2.24h.conrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.14.2.2.24h.conrot)
 anova(mod.14.2.2.24h.conrot.viab,mod.14.2.2.24h.conrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -817,7 +817,7 @@ ks.test(mod.14.2.2.24h.conrot.viab$residuals, "pnorm", 0, sd(mod.14.2.2.24h.conr
 anova(mod.14.2.2.24h.conrot.viab)
 tky.14.2.2.24h.conrot.viab<-glht(mod.14.2.2.24h.conrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.14.2.2.24h.conrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -833,7 +833,7 @@ interaction.plot(x.factor = datos.14.2.2.24h.conrot$tratam,
 #---------------------------viab-------------------------------------#
 datos.wita.4h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WA1"|tratam=="WA2"|tratam=="WA3")&Incubacion=="4",]
 mod.wita.4h.sinrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.wita.4h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.4h.sinrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.wita.4h.sinrot)
 anova(mod.wita.4h.sinrot.viab,mod.wita.4h.sinrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -844,7 +844,7 @@ ks.test(mod.wita.4h.sinrot.viab$residuals, "pnorm", 0, sd(mod.wita.4h.sinrot.via
 anova(mod.wita.4h.sinrot.viab)
 tky.wita.4h.sinrot.viab<-glht(mod.wita.4h.sinrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.4h.sinrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -859,7 +859,7 @@ interaction.plot(x.factor = datos.wita.4h.sinrot$tratam,
 #---------------------------viab-------------------------------------#
 datos.wita.24h.sinrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WA1"|tratam=="WA2"|tratam=="WA3")&Incubacion=="24",]
 mod.wita.24h.sinrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.wita.24h.sinrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.24h.sinrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.wita.24h.sinrot)
 anova(mod.wita.24h.sinrot.viab,mod.wita.24h.sinrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -870,7 +870,7 @@ ks.test(mod.wita.24h.sinrot.viab$residuals, "pnorm", 0, sd(mod.wita.24h.sinrot.v
 anova(mod.wita.24h.sinrot.viab)
 tky.wita.24h.sinrot.viab<-glht(mod.wita.24h.sinrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.24h.sinrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -886,7 +886,7 @@ interaction.plot(x.factor = datos.wita.24h.sinrot$tratam,
 #---------------------------viab-------------------------------------#
 datos.wita.4h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WAR1"|tratam=="WAR2"|tratam=="WAR3")&Incubacion=="4",]
 mod.wita.4h.conrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.wita.4h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.4h.conrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.wita.4h.conrot)
 anova(mod.wita.4h.conrot.viab,mod.wita.4h.conrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -897,7 +897,7 @@ ks.test(mod.wita.4h.conrot.viab$residuals, "pnorm", 0, sd(mod.wita.4h.conrot.via
 anova(mod.wita.4h.conrot.viab)
 tky.wita.4h.conrot.viab<-glht(mod.wita.4h.conrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.4h.conrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
@@ -913,7 +913,7 @@ interaction.plot(x.factor = datos.wita.4h.conrot$tratam,
 #---------------------------viab-------------------------------------#
 datos.wita.24h.conrot<-datos_ros[(tratam=="CN"|tratam=="CP"|tratam=="DMSO"|tratam=="WAR1"|tratam=="WAR2"|tratam=="WAR3")&Incubacion=="24",]
 mod.wita.24h.conrot.viab<-lm(Viabilidad~tratam+Experimento,data=datos.wita.24h.conrot)
-#verificar la interacción
+#verificar la interacciÃ³n
 mod.wita.24h.conrot.viab2<-lm(Viabilidad~tratam*Experimento,data=datos.wita.24h.conrot)
 anova(mod.wita.24h.conrot.viab,mod.wita.24h.conrot.viab2)
 #se rechaza Ho cuando es heterocedastico
@@ -924,7 +924,7 @@ ks.test(mod.wita.24h.conrot.viab$residuals, "pnorm", 0, sd(mod.wita.24h.conrot.v
 anova(mod.wita.24h.conrot.viab)
 tky.wita.24h.conrot.viab<-glht(mod.wita.24h.conrot.viab, linfct = mcp(tratam = "Tukey"), alternative = "two.sided")
 summary(tky.wita.24h.conrot.viab)
-#gráficos de supuestos
+#grÃ¡ficos de supuestos
 par(mar=c(2.5,2.5,1.75,1.75))
 layout(matrix(c(1,2,3,6,1,4,5,6),ncol=2),heights=c(1.5,3,3,3))
 plot.new()
