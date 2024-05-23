@@ -1,0 +1,322 @@
+#############################################################################
+## Generacion de graficos sobre la calidad de las secuencias obtenidas ######
+#############################################################################
+library(readxl)
+library(ggprism)
+library(dplyr) 
+library(ggplot2)
+library(ggpubr)
+library(psych)
+library(scales)
+theme_set(theme_pubclean())
+library(multcomp)
+library(mvtnorm)
+library(survival)
+library(lmtest)
+library(graphics)
+library(car)
+library(MASS)
+library(FSA)
+
+#cargar datos
+raw <- read_excel("C:/Users/Luis/OneDrive/4. CIBCM/Resultados ensayos/ChIP/BAMs_resumen.xlsx", 
+                  sheet = "raw", col_types = c("text", 
+                                                 "text", "text", "numeric", "numeric", 
+                                                 "skip", "numeric"))
+
+trimmed <- read_excel("C:/Users/Luis/OneDrive/4. CIBCM/Resultados ensayos/ChIP/BAMs_resumen.xlsx", 
+                  sheet = "trimmed", col_types = c("text", 
+                                                 "text", "text", "numeric", "numeric", 
+                                                 "skip", "numeric"))
+picos <- read_excel("C:/Users/Luis/OneDrive/4. CIBCM/Resultados ensayos/ChIP/BAMs_resumen.xlsx", 
+                    sheet = "picos", col_types = c("text", 
+                                                   "text", "text", "numeric"))
+
+Aligment_stats <- read_excel("C:/Users/Luis/OneDrive/4. CIBCM/Resultados ensayos/ChIP/Aligment_stats.xlsx", 
+                             col_types = c("text", "text", "text", 
+                                           "numeric", "numeric", "numeric", 
+                                           "numeric", "numeric", "numeric"))
+
+
+# Obtener los niveles �nicos de la variable Condition
+unique_conditions <- unique(raw$Condition)
+
+# Definir una paleta de colores para asignar a cada condici�n
+colores_asignados <- rainbow(length(unique_conditions))
+
+# Crear el boxplot dividido por Antibody y condicionando los colores por Condition
+ggplot(raw, aes(x = Condition, y = `M Seqs`, color = Antibody)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  theme_bw()
+
+ggplot(raw, aes(x = Antibody, y = `M Seqs`, color = Condition)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  theme_bw()
+
+ggplot(raw, aes(x = Antibody, y = `% Dups`)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Porcentaje Duplicaci�n", color = "Condici�n")   # Etiquetas de ejes y leyenda
+
+# Realizar el ANOVA
+modelo_anova_raw <- aov(`% Dups` ~ Antibody, data = raw)
+bptest(`% Dups` ~ Antibody, data = raw)
+ks.test(modelo_anova_raw$residuals, "pnorm", 0, sd(modelo_anova_raw$residuals))
+#TRANSFORMACI�N
+plot(boxcox(modelo_anova_raw))
+boxcox(modelo_anova_raw)$x[which.max(boxcox(modelo_anova_raw)$y)]
+modelo_anova_dups_fit<-aov(`% Dups`^0.78 ~ Antibody, data = trimmed)
+bptest(`% Dups`^0.78 ~ Antibody , data = trimmed)
+ks.test(modelo_anova_dups_fit$residuals, "pnorm", 0, sd(modelo_anova_dups_fit$residuals))
+
+#Se realiza prueba no paramétrica por no cumplir supuestos.
+kruskal.test(`% Dups`  ~ Antibody, data = raw)
+
+dunn_resultados_raw <- dunnTest(`% Dups`  ~ Antibody, data = raw, method = "bonferroni")
+print(dunn_resultados_raw)
+
+
+#Graficacion
+ggplot(raw, aes(x = Antibody, y = `% GC`)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "%GC", color = "Condici�n")
+
+# Realizar el ANOVA
+modelo_anova_raw_GC <- aov(`% GC` ~ Antibody, data = raw)
+bptest(`% GC` ~ Antibody, data = raw)
+ks.test(modelo_anova_raw_GC$residuals, "pnorm", 0, sd(modelo_anova_raw_GC$residuals))
+#TRANSFORMACI�N
+plot(boxcox(modelo_anova_raw_GC))
+boxcox(modelo_anova_raw)$x[which.max(boxcox(modelo_anova_raw)$y)]
+modelo_anova_dups_fit<-aov(`% Dups`^0.78 ~ Antibody, data = trimmed)
+bptest(`% Dups`^0.78 ~ Antibody , data = trimmed)
+ks.test(modelo_anova_dups_fit$residuals, "pnorm", 0, sd(modelo_anova_dups_fit$residuals))
+
+kruskal.test(`% GC`  ~ Antibody, data = raw)
+
+dunn_resultados_raw_GC <- dunnTest(`% GC`  ~ Antibody, data = raw, method = "bonferroni")
+print(dunn_resultados_raw_GC)
+
+ggplot(raw, aes(x = Antibody, y = `M Seqs`)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Reads (Millones)", color = "Condici�n")   # Etiquetas de ejes y leyenda
+
+# Realizar el ANOVA
+modelo_anova <- aov(`M Seqs` ~ Antibody, data = raw)
+bptest(`M Seqs` ~  Antibody, data = raw)
+ks.test(modelo_anova$residuals, "pnorm", 0, sd(modelo_anova$residuals))
+# Resumen del ANOVA
+summary(modelo_anova)
+
+# Realizar la prueba de Tukey
+tukey_resultados <- TukeyHSD(modelo_anova)
+
+# Mostrar los resultados
+print(tukey_resultados)
+
+
+#TRIMMED
+ggplot(trimmed, aes(x = Condition, y = `M Seqs`, color = Antibody)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  theme_bw()
+
+ggplot(trimmed, aes(x = Antibody, y = `M Seqs`, color = Condition)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  theme_bw()
+
+ggplot(trimmed, aes(x = Antibody, y = `% Dups`)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Porcentaje Duplicaci�n", color = "Condici�n")   # Etiquetas de ejes y leyenda
+
+
+# Realizar el ANOVA
+modelo_anova_dups <- aov(`% Dups` ~ Antibody, data = trimmed)
+bptest(`% Dups` ~ Antibody, data = trimmed)
+ks.test(modelo_anova_dups$residuals, "pnorm", 0, sd(modelo_anova_dups$residuals))
+#TRANSFORMACI�N
+plot(boxcox(modelo_anova_dups))
+boxcox(modelo_anova_dups)$x[which.max(boxcox(modelo_anova_dups)$y)]
+modelo_anova_dups_fit<-aov(`% Dups`^0.78 ~ Antibody, data = trimmed)
+bptest(`% Dups`^0.78 ~ Antibody , data = trimmed)
+ks.test(modelo_anova_dups_fit$residuals, "pnorm", 0, sd(modelo_anova_dups_fit$residuals))
+
+kruskal.test(`% Dups`  ~ Antibody, data = trimmed)
+
+dunn_resultados_dups <- dunnTest(`% Dups`  ~ Antibody, data = trimmed, method = "bonferroni")
+print(dunn_resultados_dups)
+
+# Resumen del ANOVA
+summary(modelo_anova_2)
+
+# Realizar la prueba de Tukey
+tukey_resultados_2 <- TukeyHSD(modelo_anova_2)
+
+# Mostrar los resultados
+print(tukey_resultados_2)
+
+##########################################################
+
+
+ggplot(trimmed, aes(x = Antibody, y = `% GC`)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "%GC", color = "Condici�n")
+
+
+# Realizar el ANOVA
+modelo_anova_trimmed_GC <- aov(`% GC` ~ Antibody, data = trimmed)
+bptest(`% GC` ~ Antibody, data = trimmed)
+ks.test(modelo_anova_trimmed_GC$residuals, "pnorm", 0, sd(modelo_anova_trimmed_GC$residuals))
+#TRANSFORMACI�N
+plot(boxcox(modelo_anova_trimmed_GC))
+boxcox(modelo_anova_trimmed_GC)$x[which.max(boxcox(modelo_anova_trimmed_GC)$y)]
+modelo_anova_trimmed_GC_fit<-aov(`% GC`^1.23 ~ Antibody, data = trimmed)
+bptest(`% GC`^1.23 ~ Antibody, data = trimmed)
+ks.test(modelo_anova_trimmed_GC_fit$residuals, "pnorm", 0, sd(modelo_anova_trimmed_GC_fit$residuals))
+
+kruskal.test(`% GC`  ~ Antibody, data = trimmed)
+
+dunn_resultados_trimmed_GC <- dunnTest(`% GC`  ~ Antibody, data = trimmed, method = "bonferroni")
+print(dunn_resultados_trimmed_GC)
+
+ggplot(trimmed, aes(x = Antibody, y = `M Seqs`)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Reads (Millones)", color = "Condici�n")
+
+
+# Realizar el ANOVA
+modelo_anova_2 <- aov(`M Seqs` ~ Antibody, data = trimmed)
+bptest(`M Seqs` ~ Antibody, data = trimmed)
+ks.test(modelo_anova_2$residuals, "pnorm", 0, sd(modelo_anova_2$residuals))
+
+# Resumen del ANOVA
+summary(modelo_anova_2)
+
+# Realizar la prueba de Tukey
+tukey_resultados_2 <- TukeyHSD(modelo_anova_2)
+
+# Mostrar los resultados
+print(tukey_resultados_2)
+
+
+###############################################################################
+#Alignment
+
+Aligment_stats <- Aligment_stats %>% 
+  mutate(mapped = `PE mapped uniquely`/1000000)
+  
+Aligment_stats <- Aligment_stats %>% 
+  mutate(unmapped = `PE neither mate aligned`/1000000)
+  
+Aligment_stats <- Aligment_stats %>% 
+  mutate(multimapped = `PE multimapped`/1000000)
+
+ggplot(Aligment_stats, aes(x = Antibody, y = mapped)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Reads (Millones)", color = "Condici�n")
+
+ggplot(Aligment_stats, aes(x = Antibody, y = unmapped)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Reads (Millones)", color = "Condici�n")
+
+ggplot(Aligment_stats, aes(x = Antibody, y = multimapped)) +
+  geom_boxplot() +
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Reads (Millones)", color = "Condici�n")
+
+#ANOVA
+modelo_anova_3 <- aov(mapped ~ Antibody * Condition, data = Aligment_stats)
+bptest(mapped ~ Antibody * Condition, data = Aligment_stats)
+ks.test(modelo_anova_3$residuals, "pnorm", 0, sd(modelo_anova_3$residuals))
+
+# Resumen del ANOVA
+summary(modelo_anova_3)
+
+
+#ANOVA
+modelo_anova_4 <- aov(unmapped ~ Antibody * Condition, data = Aligment_stats)
+bptest(unmapped ~ Antibody * Condition, data = Aligment_stats)
+ks.test(modelo_anova_4$residuals, "pnorm", 0, sd(modelo_anova_4$residuals))
+#TRANSFORMACI�N
+plot(boxcox(modelo_anova_4))
+boxcox(modelo_anova_4)$x[which.max(boxcox(modelo_anova_4)$y)]
+modelo_anova_4_fit<-aov(unmapped^0.58 ~ Antibody * Condition, data = Aligment_stats)
+bptest(unmapped^0.58 ~ Antibody * Condition, data = Aligment_stats)
+ks.test(modelo_anova_4_fit$residuals, "pnorm", 0, sd(modelo_anova_4_fit$residuals))
+
+# Resumen del ANOVA
+summary(modelo_anova_4_fit)
+
+# Realizar la prueba de Tukey
+tukey_resultados_3 <- TukeyHSD(modelo_anova_4_fit)
+
+# Mostrar los resultados
+print(tukey_resultados_3)
+
+#ANOVA
+modelo_anova_multimapped <- aov(multimapped ~ Antibody * Condition, data = Aligment_stats)
+bptest(multimapped ~ Antibody * Condition, data = Aligment_stats)
+ks.test(modelo_anova_multimapped$residuals, "pnorm", 0, sd(modelo_anova_multimapped$residuals))
+
+# Resumen del ANOVA
+summary(modelo_anova_multimapped)
+
+############################################################################
+#PICOS
+unique_conditions <- unique(picos$Condition)
+colores_asignados <- rainbow(length(unique_conditions))
+
+
+ggplot(picos, aes(x = Antibody, y = Picos)) +
+  geom_boxplot() + 
+  scale_color_manual(values = colores_asignados)+
+  geom_point(position = position_jitter(width = 0.2), size = 2, aes(color = Condition)) +
+  theme_bw()+
+  labs(x = "Anticuerpo", y = "Picos", color = "Condici�n")
+
+#ANOVA
+modelo_anova_4 <- aov(Picos ~ Condition * Antibody, data = picos)
+summary(modelo_anova_4)
+bptest(Picos ~ Condition * Antibody, data = picos)
+ks.test(modelo_anova_4$residuals, "pnorm", 0, sd(modelo_anova_4$residuals))
+#TRANSFORMACI�N
+plot(boxcox(modelo_anova_4))
+boxcox(modelo_anova_4)$x[which.max(boxcox(modelo_anova_4)$y)]
+modelo_anova_4_fit<-aov(Picos ~ Condition * Antibody, data = picos)
+
+plot(modelo_anova_4)
+
+kruskal.test(Picos  ~ Antibody, data = picos)
+
+dunn_resultados <- dunnTest(Picos  ~ Antibody, data = picos, method = "bonferroni")
+print(dunn_resultados)
+
+
